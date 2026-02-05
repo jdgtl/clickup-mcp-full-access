@@ -253,9 +253,9 @@ export class EnhancedDocsClient {
   /**
    * Update an existing document
    */
-  async updateDoc(docId: string, params: UpdateDocParams): Promise<Doc> {
+  async updateDoc(workspaceId: string, docId: string, params: UpdateDocParams): Promise<Doc> {
     try {
-      const url = `https://api.clickup.com/api/v3/docs/${docId}`;
+      const url = `https://api.clickup.com/api/v3/workspaces/${workspaceId}/docs/${docId}`;
       
       const requestBody: any = {};
       if (params.name !== undefined) requestBody.name = params.name;
@@ -276,9 +276,9 @@ export class EnhancedDocsClient {
   /**
    * Delete a document
    */
-  async deleteDoc(docId: string): Promise<void> {
+  async deleteDoc(workspaceId: string, docId: string): Promise<void> {
     try {
-      const url = `https://api.clickup.com/api/v3/docs/${docId}`;
+      const url = `https://api.clickup.com/api/v3/workspaces/${workspaceId}/docs/${docId}`;
       
       await axios.delete(url, {
         headers: this.getHeaders()
@@ -292,9 +292,9 @@ export class EnhancedDocsClient {
   /**
    * Get document details
    */
-  async getDoc(docId: string): Promise<Doc> {
+  async getDoc(workspaceId: string, docId: string): Promise<Doc> {
     try {
-      const url = `https://api.clickup.com/api/v3/docs/${docId}`;
+      const url = `https://api.clickup.com/api/v3/workspaces/${workspaceId}/docs/${docId}`;
       
       const response = await axios.get(url, {
         headers: this.getHeaders()
