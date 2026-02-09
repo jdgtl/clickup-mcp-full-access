@@ -186,12 +186,13 @@ export function setupEnhancedDocTools(server: McpServer): void {
     'clickup_update_doc',
     'Update an existing ClickUp document. Can update name, content, and sharing settings.',
     {
+      workspace_id: z.string().min(1).describe('The ID of the workspace containing the document'),
       doc_id: z.string().min(1).describe('The ID of the document to update'),
       name: z.string().min(1).max(255).optional().describe('New name for the document'),
       content: z.string().optional().describe('New content for the document (markdown or HTML)'),
       public: z.boolean().optional().describe('Update public sharing setting')
     },
-    async ({ doc_id, name, content, public: isPublic }) => {
+    async ({ workspace_id, doc_id, name, content, public: isPublic }) => {
       try {
         // Validate that at least one field is being updated
         if (name === undefined && content === undefined && isPublic === undefined) {
@@ -201,7 +202,7 @@ export function setupEnhancedDocTools(server: McpServer): void {
           };
         }
 
-        const updatedDoc = await enhancedDocsClient.updateDoc(doc_id, {
+        const updatedDoc = await enhancedDocsClient.updateDoc(workspace_id, doc_id, {
           name,
           content,
           public: isPublic
@@ -227,11 +228,12 @@ export function setupEnhancedDocTools(server: McpServer): void {
     'clickup_delete_doc',
     'Delete a ClickUp document. This action cannot be undone.',
     {
+      workspace_id: z.string().min(1).describe('The ID of the workspace containing the document'),
       doc_id: z.string().min(1).describe('The ID of the document to delete')
     },
-    async ({ doc_id }) => {
+    async ({ workspace_id, doc_id }) => {
       try {
-        await enhancedDocsClient.deleteDoc(doc_id);
+        await enhancedDocsClient.deleteDoc(workspace_id, doc_id);
 
         return {
           content: [{ 
@@ -253,11 +255,12 @@ export function setupEnhancedDocTools(server: McpServer): void {
     'clickup_get_doc',
     'Get detailed information about a specific ClickUp document including metadata and sharing settings.',
     {
+      workspace_id: z.string().min(1).describe('The ID of the workspace containing the document'),
       doc_id: z.string().min(1).describe('The ID of the document to get')
     },
-    async ({ doc_id }) => {
+    async ({ workspace_id, doc_id }) => {
       try {
-        const doc = await enhancedDocsClient.getDoc(doc_id);
+        const doc = await enhancedDocsClient.getDoc(workspace_id, doc_id);
 
         return {
           content: [{ 
